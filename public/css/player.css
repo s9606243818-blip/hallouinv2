@@ -1,0 +1,639 @@
+/**
+ * СТИЛИ ИГРОКА И СПИСКА ИГРОКОВ - КРАСИВАЯ КАРТОЧНАЯ ВЕРСТКА
+ */
+
+/* ========== ОСНОВНОЙ БЛОК ИГРОКА ========== */
+.player-block {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-lg);
+}
+
+/* ========== ЗАГОЛОВОК ИГРОКА ========== */
+.player-header {
+  display: flex;
+  align-items: center;
+  gap: var(--gap-lg);
+  padding-bottom: var(--gap-lg);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+/* ========== АВАТАР ОСНОВНОГО ИГРОКА ========== */
+.player-avatar-wrapper {
+  position: relative;
+  flex-shrink: 0;
+}
+
+.player-avatar {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  border: 3px solid var(--accent);
+  object-fit: cover;
+  box-shadow: 
+    0 8px 20px rgba(0, 0, 0, 0.4),
+    0 0 0 3px rgba(99, 102, 241, 0.2);
+  transition: all 0.3s ease;
+}
+
+.player-avatar:hover {
+  transform: scale(1.05);
+  box-shadow: 
+    0 10px 24px rgba(0, 0, 0, 0.5),
+    0 0 30px rgba(99, 102, 241, 0.4);
+}
+
+/* ========== КНОПКА ЗАГРУЗКИ АВАТАРА ========== */
+.avatar-upload-btn {
+  position: absolute;
+  bottom: -8px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: linear-gradient(135deg, var(--accent), var(--accent-light));
+  color: white;
+  padding: 4px 10px;
+  border-radius: 6px;
+  font-size: 0.7rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  white-space: nowrap;
+  box-shadow: 
+    0 2px 8px rgba(99, 102, 241, 0.4),
+    inset 0 1px 0 rgba(255, 255, 255, 0.2);
+  z-index: 2;
+}
+
+.avatar-upload-btn:hover {
+  transform: translateX(-50%) translateY(-2px);
+  box-shadow: 
+    0 4px 12px rgba(99, 102, 241, 0.6),
+    inset 0 1px 0 rgba(255, 255, 255, 0.3);
+}
+
+/* ========== ИНФОРМАЦИЯ ОБ ИГРОКЕ ========== */
+.player-info {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  min-width: 0;
+}
+
+.player-info h3 {
+  font-size: 1.3rem;
+  font-weight: 700;
+  color: var(--text);
+  margin: 0;
+  letter-spacing: 0.5px;
+  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.player-info h3::before {
+  display: none;
+}
+
+.player-role {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 14px;
+  background: linear-gradient(135deg, var(--accent), var(--accent-light));
+  border-radius: 8px;
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: white;
+  box-shadow: 
+    0 2px 8px rgba(99, 102, 241, 0.3),
+    inset 0 1px 0 rgba(255, 255, 255, 0.2);
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+  align-self: flex-start;
+  transition: all 0.3s ease;
+}
+
+.player-role:hover {
+  transform: scale(1.05);
+  box-shadow: 
+    0 4px 12px rgba(99, 102, 241, 0.4),
+    inset 0 1px 0 rgba(255, 255, 255, 0.3);
+}
+
+/* ========== СТАТИСТИКА ИГРОКА ========== */
+.player-stats {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 10px;
+}
+
+.player-stats .stat {
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: var(--radius-md);
+  padding: 12px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  transition: all 0.3s ease;
+}
+
+.player-stats .stat:hover {
+  background: rgba(255, 255, 255, 0.06);
+  border-color: var(--accent);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(99, 102, 241, 0.2);
+}
+
+.player-stats .stat-label {
+  font-size: 0.8rem;
+  color: var(--text-dim);
+  font-weight: 500;
+}
+
+.player-stats .stat-value,
+.player-stats .stat span:not(.stat-label) {
+  font-weight: 700;
+  color: var(--text);
+  font-size: 1rem;
+}
+
+/* ========== ДЕЙСТВИЯ ИГРОКА ========== */
+.player-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding-top: var(--gap-md);
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.player-actions button {
+  width: 100%;
+  padding: 12px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  border-radius: var(--radius-md);
+  transition: all 0.3s ease;
+}
+
+.player-actions button:hover {
+  transform: translateY(-2px);
+}
+
+/* ========== КОНТЕЙНЕР СПИСКА ИГРОКОВ ========== */
+#playersList,
+.players-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  max-height: 70vh;
+  overflow-y: auto;
+  padding-right: 8px;
+}
+
+/* Кастомный скроллбар */
+#playersList::-webkit-scrollbar,
+.players-list::-webkit-scrollbar {
+  width: 6px;
+}
+
+#playersList::-webkit-scrollbar-track,
+.players-list::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 3px;
+}
+
+#playersList::-webkit-scrollbar-thumb,
+.players-list::-webkit-scrollbar-thumb {
+  background: var(--accent);
+  border-radius: 3px;
+  transition: background 0.3s ease;
+}
+
+#playersList::-webkit-scrollbar-thumb:hover,
+.players-list::-webkit-scrollbar-thumb:hover {
+  background: var(--accent-light);
+}
+
+/* ========== КАРТОЧКА ИГРОКА В СПИСКЕ ========== */
+.player-item {
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.03), rgba(255, 255, 255, 0.01));
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: var(--radius-lg);
+  padding: 14px;
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  cursor: pointer;
+  animation: playerSlideIn 0.4s ease-out;
+  position: relative;
+  overflow: hidden;
+}
+
+@keyframes playerSlideIn {
+  from {
+    opacity: 0;
+    transform: translateX(-30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+/* Эффект блеска */
+.player-item::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.1),
+    transparent
+  );
+  transition: left 0.5s ease;
+}
+
+.player-item:hover::before {
+  left: 100%;
+}
+
+.player-item:hover {
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.06), rgba(255, 255, 255, 0.03));
+  border-color: var(--accent);
+  transform: translateX(4px);
+  box-shadow: 
+    0 4px 12px rgba(99, 102, 241, 0.2),
+    inset 0 1px 0 rgba(255, 255, 255, 0.1);
+}
+
+/* ========== АВАТАР В СПИСКЕ ========== */
+.player-item-avatar {
+  width: 56px;
+  height: 56px;
+  min-width: 56px;
+  border-radius: 50%;
+  border: 3px solid var(--accent);
+  object-fit: cover;
+  box-shadow: 
+    0 4px 12px rgba(0, 0, 0, 0.3),
+    0 0 0 2px rgba(99, 102, 241, 0.2);
+  transition: all 0.3s ease;
+}
+
+.player-item:hover .player-item-avatar {
+  transform: scale(1.05);
+  box-shadow: 
+    0 6px 16px rgba(0, 0, 0, 0.4),
+    0 0 20px rgba(99, 102, 241, 0.4);
+}
+
+/* ========== КОНТЕНТ КАРТОЧКИ ========== */
+.player-item-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  min-width: 0;
+}
+
+/* ========== ЗАГОЛОВОК КАРТОЧКИ (ИМЯ + РОЛЬ) ========== */
+.player-item-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+/* ========== ИНФО (ИМЯ + СТАТЫ) ========== */
+.player-item-info {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  flex: 1;
+  min-width: 0;
+}
+
+/* ========== ИМЯ ИГРОКА ========== */
+.player-item-name {
+  font-weight: 700;
+  color: var(--text);
+  font-size: 1rem;
+  line-height: 1.3;
+  letter-spacing: 0.3px;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+/* ========== СТАТИСТИКА В СПИСКЕ ========== */
+.player-item-stats {
+  font-size: 0.8rem;
+  color: var(--text-dim);
+  font-weight: 500;
+  line-height: 1.4;
+}
+
+/* ========== РОЛЬ В СПИСКЕ ========== */
+.player-item-role {
+  padding: 6px 12px;
+  background: linear-gradient(135deg, var(--accent), var(--accent-light));
+  border-radius: 8px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  white-space: nowrap;
+  box-shadow: 
+    0 2px 8px rgba(99, 102, 241, 0.3),
+    inset 0 1px 0 rgba(255, 255, 255, 0.2);
+  color: white;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  transition: all 0.3s ease;
+  align-self: flex-start;
+}
+
+.player-item:hover .player-item-role {
+  transform: scale(1.05);
+  box-shadow: 
+    0 4px 12px rgba(99, 102, 241, 0.4),
+    inset 0 1px 0 rgba(255, 255, 255, 0.3);
+}
+
+/* ========== ТОПОВЫЕ ИГРОКИ ========== */
+
+/* 1 место - Золото */
+.player-item.top1 {
+  background: linear-gradient(135deg, rgba(255, 215, 0, 0.1), rgba(255, 185, 0, 0.05));
+  border: 2px solid rgba(255, 215, 0, 0.4);
+}
+
+.player-item.top1:hover {
+  border-color: rgba(255, 215, 0, 0.6);
+  box-shadow: 
+    0 6px 20px rgba(255, 215, 0, 0.3),
+    inset 0 1px 0 rgba(255, 255, 255, 0.2);
+}
+
+.player-item.top1 .player-item-avatar {
+  border-color: #ffd700;
+  box-shadow: 
+    0 4px 12px rgba(255, 215, 0, 0.5),
+    0 0 0 2px rgba(255, 215, 0, 0.3);
+}
+
+.player-item.top1 .player-item-name {
+  color: #ffd700;
+  text-shadow: 0 2px 8px rgba(255, 215, 0, 0.5);
+}
+
+/* 2 место - Серебро */
+.player-item.top2 {
+  background: linear-gradient(135deg, rgba(192, 192, 192, 0.08), rgba(169, 169, 169, 0.04));
+  border: 2px solid rgba(192, 192, 192, 0.3);
+}
+
+.player-item.top2:hover {
+  border-color: rgba(192, 192, 192, 0.5);
+  box-shadow: 
+    0 6px 20px rgba(192, 192, 192, 0.2),
+    inset 0 1px 0 rgba(255, 255, 255, 0.2);
+}
+
+.player-item.top2 .player-item-avatar {
+  border-color: #c0c0c0;
+  box-shadow: 
+    0 4px 12px rgba(192, 192, 192, 0.4),
+    0 0 0 2px rgba(192, 192, 192, 0.2);
+}
+
+.player-item.top2 .player-item-name {
+  color: #c0c0c0;
+  text-shadow: 0 2px 8px rgba(192, 192, 192, 0.4);
+}
+
+/* 3 место - Бронза */
+.player-item.top3 {
+  background: linear-gradient(135deg, rgba(205, 127, 50, 0.08), rgba(184, 115, 51, 0.04));
+  border: 2px solid rgba(205, 127, 50, 0.3);
+}
+
+.player-item.top3:hover {
+  border-color: rgba(205, 127, 50, 0.5);
+  box-shadow: 
+    0 6px 20px rgba(205, 127, 50, 0.2),
+    inset 0 1px 0 rgba(255, 255, 255, 0.2);
+}
+
+.player-item.top3 .player-item-avatar {
+  border-color: #cd7f32;
+  box-shadow: 
+    0 4px 12px rgba(205, 127, 50, 0.4),
+    0 0 0 2px rgba(205, 127, 50, 0.2);
+}
+
+.player-item.top3 .player-item-name {
+  color: #cd7f32;
+  text-shadow: 0 2px 8px rgba(205, 127, 50, 0.4);
+}
+
+/* ========== КНОПКА ЛАЙКА ========== */
+.like-btn {
+  background: linear-gradient(135deg, #ec4899, #f43f5e);
+  padding: 8px 16px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  border-radius: 8px;
+  border: none;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  color: white;
+  box-shadow: 
+    0 2px 8px rgba(236, 72, 153, 0.3),
+    inset 0 1px 0 rgba(255, 255, 255, 0.2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  animation: likeAppear 0.3s ease-out;
+  width: 100%;
+}
+
+@keyframes likeAppear {
+  from {
+    opacity: 0;
+    transform: scale(0.9);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.like-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 
+    0 4px 16px rgba(236, 72, 153, 0.5),
+    0 0 20px rgba(236, 72, 153, 0.4),
+    inset 0 1px 0 rgba(255, 255, 255, 0.3);
+}
+
+.like-btn:active {
+  transform: translateY(0);
+  box-shadow: 
+    0 2px 8px rgba(236, 72, 153, 0.4),
+    inset 0 1px 0 rgba(255, 255, 255, 0.2);
+}
+
+/* ========== ПУСТОЕ СОСТОЯНИЕ ========== */
+.players-list p {
+  text-align: center;
+  padding: var(--gap-lg);
+  color: var(--text-dim);
+  font-size: 0.9rem;
+  opacity: 0.7;
+}
+
+/* ========== АДАПТИВНОСТЬ ========== */
+
+@media (max-width: 768px) {
+  /* Основной блок игрока */
+  .player-header {
+    gap: var(--gap-md);
+  }
+
+  .player-avatar {
+    width: 64px;
+    height: 64px;
+  }
+
+  .player-info h3 {
+    font-size: 1.1rem;
+  }
+
+  .player-stats {
+    grid-template-columns: 1fr;
+  }
+
+  /* Список игроков */
+  .player-item {
+    padding: 12px;
+    gap: 12px;
+  }
+
+  .player-item-avatar {
+    width: 48px;
+    height: 48px;
+    min-width: 48px;
+    border-width: 2px;
+  }
+
+  .player-item-name {
+    font-size: 0.9rem;
+  }
+
+  .player-item-stats {
+    font-size: 0.75rem;
+  }
+
+  .player-item-role {
+    font-size: 0.7rem;
+    padding: 5px 10px;
+  }
+
+  .like-btn {
+    font-size: 0.75rem;
+    padding: 7px 14px;
+  }
+}
+
+@media (max-width: 480px) {
+  /* Основной блок игрока */
+  .player-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .player-avatar {
+    width: 56px;
+    height: 56px;
+  }
+
+  .player-info h3 {
+    font-size: 1rem;
+  }
+
+  .player-role {
+    font-size: 0.75rem;
+    padding: 5px 12px;
+  }
+
+  .player-stats .stat {
+    padding: 10px;
+  }
+
+  /* Список игроков */
+  .player-item {
+    padding: 10px;
+    gap: 10px;
+  }
+
+  .player-item-avatar {
+    width: 44px;
+    height: 44px;
+    min-width: 44px;
+  }
+
+  .player-item-name {
+    font-size: 0.85rem;
+  }
+
+  .player-item-stats {
+    font-size: 0.7rem;
+  }
+
+  .player-item-role {
+    font-size: 0.65rem;
+    padding: 4px 8px;
+  }
+
+  .player-item-header {
+    gap: 8px;
+  }
+
+  .player-item-info {
+    gap: 4px;
+  }
+
+  .like-btn {
+    font-size: 0.7rem;
+    padding: 6px 12px;
+  }
+}
+
+/* ========== АНИМАЦИИ ЗАГРУЗКИ ========== */
+@keyframes shimmerPlayer {
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
+}
+
+.player-item.loading {
+  animation: shimmerPlayer 2s infinite;
+  background: linear-gradient(
+    90deg,
+    rgba(255, 255, 255, 0.02) 0%,
+    rgba(255, 255, 255, 0.05) 50%,
+    rgba(255, 255, 255, 0.02) 100%
+  );
+  background-size: 200% 100%;
+}

@@ -1,0 +1,196 @@
+/**
+ * Модальные окна - С ВЫДЕЛЕНИЕМ И СЧЕТЧИКОМ ОНЛАЙН
+ */
+
+.modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.7);
+    backdrop-filter: blur(10px);
+    z-index: 1000;
+    align-items: center;
+    justify-content: center;
+}
+
+.modal.active {
+    display: flex;
+}
+
+.modal-content {
+    background: linear-gradient(135deg, rgba(39, 48, 91, 0.95) 0%, rgba(69, 19, 60, 0.95) 100%);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    border-radius: 20px;
+    padding: 32px;
+    max-width: 500px;
+    width: 90%;
+    max-height: 80vh;
+    overflow-y: auto;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+    display: flex;
+    flex-direction: column;
+}
+
+.modal-content h2,
+.modal-content h3 {
+    margin-bottom: 24px;
+    text-align: center;
+    color: #fff;
+}
+
+.modal-content input {
+    width: 100%;
+    padding: 14px 18px;
+    margin-bottom: 20px;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 12px;
+    color: #fff;
+    font-size: 1rem;
+    transition: all 0.3s ease;
+}
+
+.modal-content input:focus {
+    outline: none;
+    border-color: rgba(139, 92, 246, 0.5);
+    background: rgba(255, 255, 255, 0.08);
+}
+
+.modal-content input::placeholder {
+    color: rgba(255, 255, 255, 0.4);
+}
+
+/* СЧЕТЧИК ОНЛАЙН */
+.online-counter {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    margin-top: 16px;
+    padding: 12px 20px;
+    background: rgba(16, 185, 129, 0.1);
+    border: 1px solid rgba(16, 185, 129, 0.3);
+    border-radius: 12px;
+    font-size: 0.95rem;
+}
+
+.online-text {
+    color: rgba(255, 255, 255, 0.7);
+    font-weight: 400;
+}
+
+.online-count {
+    color: #10b981;
+    font-weight: 700;
+    font-size: 1.2rem;
+    text-shadow: 0 0 10px rgba(16, 185, 129, 0.5);
+}
+
+.target-list,
+.roles-list,
+.likes-stats {
+    margin-bottom: 20px;
+}
+
+.target-item,
+.role-item {
+    padding: 14px 16px;
+    margin-bottom: 10px;
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 12px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-size: 0.95rem;
+}
+
+.target-item:hover,
+.role-item:hover {
+    background: rgba(255, 255, 255, 0.08);
+    border-color: rgba(139, 92, 246, 0.5);
+    transform: translateX(5px);
+}
+
+.target-item.selected {
+    background: rgba(99, 102, 241, 0.2);
+    border-color: rgba(99, 102, 241, 0.6);
+    box-shadow: 0 0 20px rgba(99, 102, 241, 0.3);
+}
+
+.role-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+}
+
+.role-item-name {
+    font-weight: 600;
+    flex: 1;
+}
+
+.role-select {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 8px;
+    color: #fff;
+    padding: 8px 12px;
+    font-size: 0.85rem;
+    cursor: pointer;
+}
+
+.role-select option {
+    background: #27305b;
+    color: #fff;
+}
+
+.likes-stats-item {
+    padding: 14px;
+    margin-bottom: 12px;
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 12px;
+}
+
+.likes-stats-name {
+    font-weight: 600;
+    font-size: 1rem;
+    margin-bottom: 8px;
+}
+
+.likes-stats-count {
+    font-size: 0.9rem;
+    color: #ec4899;
+    margin-bottom: 6px;
+}
+
+.likes-stats-by {
+    font-size: 0.85rem;
+    opacity: 0.7;
+}
+
+.close-modal {
+    width: 100%;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.close-modal:hover {
+    background: rgba(255, 255, 255, 0.08);
+}
+
+::-webkit-scrollbar {
+    width: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background: rgba(255, 255, 255, 0.03);
+}
+
+::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.15);
+    border-radius: 4px;
+}

@@ -1,0 +1,561 @@
+/**
+ * ГЛАВНЫЕ СТИЛИ - МИНИМАЛИСТИЧНЫЙ ДИЗАЙН С АНИМАЦИЯМИ
+ */
+
+/* ========== ОСНОВА ========== */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+:root {
+  /* Новая цветовая палитра - минималистичная */
+  --bg-dark: #0a0a0f;
+  --bg-card: rgba(20, 20, 30, 0.6);
+  --bg-hover: rgba(30, 30, 45, 0.8);
+  --accent: #6366f1;
+  --accent-light: #818cf8;
+  --accent-dark: #4f46e5;
+  --text: #e5e7eb;
+  --text-dim: #9ca3af;
+  --border: rgba(99, 102, 241, 0.2);
+  --success: #10b981;
+  --danger: #ef4444;
+  --warning: #f59e0b;
+  
+  /* Тени */
+  --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.3);
+  --shadow-md: 0 4px 16px rgba(0, 0, 0, 0.4);
+  --shadow-lg: 0 8px 32px rgba(0, 0, 0, 0.5);
+  --shadow-glow: 0 0 20px rgba(99, 102, 241, 0.3);
+  
+  /* Радиусы */
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 16px;
+  
+  /* Отступы */
+  --gap-sm: 8px;
+  --gap-md: 16px;
+  --gap-lg: 24px;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+  background: linear-gradient(135deg, #0a0a0f 0%, #1a1a2e 50%, #16213e 100%);
+  color: var(--text);
+  min-height: 100vh;
+  line-height: 1.6;
+  overflow-x: hidden;
+}
+
+/* Анимированный фон */
+body::before {
+  content: '';
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: 
+    radial-gradient(circle at 20% 50%, rgba(99, 102, 241, 0.1) 0%, transparent 50%),
+    radial-gradient(circle at 80% 80%, rgba(99, 102, 241, 0.1) 0%, transparent 50%);
+  animation: bgPulse 10s ease-in-out infinite alternate;
+  pointer-events: none;
+  z-index: 0;
+}
+
+@keyframes bgPulse {
+  0% { opacity: 0.3; }
+  100% { opacity: 0.6; }
+}
+
+/* ========== КОНТЕЙНЕРЫ ========== */
+#gameContainer {
+  position: relative;
+  z-index: 1;
+  display: none;
+  grid-template-columns: 1fr 2fr 1fr;
+  grid-template-rows: auto 1fr;
+  gap: var(--gap-md);
+  max-width: 1800px;
+  margin: 0 auto;
+  padding: var(--gap-lg);
+  min-height: 100vh;
+}
+
+/* ========== СЕКЦИИ ========== */
+.section {
+  background: var(--bg-card);
+  backdrop-filter: blur(20px);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: var(--gap-lg);
+  box-shadow: var(--shadow-md);
+  transition: all 0.3s ease;
+  animation: sectionAppear 0.5s ease-out;
+}
+
+@keyframes sectionAppear {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.section:hover {
+  border-color: var(--accent);
+  box-shadow: var(--shadow-lg), var(--shadow-glow);
+  transform: translateY(-2px);
+}
+
+/* ========== ЗАГОЛОВКИ ========== */
+h3 {
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--text);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  margin-bottom: var(--gap-md);
+  display: flex;
+  align-items: center;
+  gap: var(--gap-sm);
+}
+
+h3::before {
+  content: '';
+  width: 3px;
+  height: 20px;
+  background: linear-gradient(180deg, var(--accent), var(--accent-light));
+  border-radius: 2px;
+}
+
+/* ========== КНОПКИ ========== */
+button {
+  background: linear-gradient(135deg, var(--accent), var(--accent-light));
+  color: white;
+  border: none;
+  border-radius: var(--radius-sm);
+  padding: 10px 20px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  box-shadow: var(--shadow-sm);
+  position: relative;
+  overflow: hidden;
+}
+
+button::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 0;
+  height: 0;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.3);
+  transform: translate(-50%, -50%);
+  transition: width 0.6s, height 0.6s;
+}
+
+button:hover::before {
+  width: 300px;
+  height: 300px;
+}
+
+button:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md), 0 0 15px rgba(99, 102, 241, 0.5);
+}
+
+button:active {
+  transform: translateY(0);
+}
+
+button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: none;
+}
+
+/* ========== СООБЩЕНИЯ ОБ ОШИБКАХ ========== */
+.error-message {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%) scale(0.9);
+  background: linear-gradient(135deg, rgba(239, 68, 68, 0.95), rgba(220, 38, 38, 0.95));
+  backdrop-filter: blur(20px);
+  border: 2px solid var(--danger);
+  border-radius: var(--radius-lg);
+  padding: 24px 32px;
+  color: white;
+  font-size: 1rem;
+  font-weight: 600;
+  text-align: center;
+  box-shadow: 
+    0 20px 60px rgba(239, 68, 68, 0.5),
+    0 0 40px rgba(239, 68, 68, 0.3);
+  z-index: 10000;
+  opacity: 0;
+  animation: errorAppear 0.3s ease-out forwards;
+  max-width: 400px;
+  min-width: 300px;
+}
+
+@keyframes errorAppear {
+  from {
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(0.9);
+  }
+  to {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1);
+  }
+}
+
+.error-message::before {
+  content: '⚠️';
+  display: block;
+  font-size: 2.5rem;
+  margin-bottom: 12px;
+  animation: errorShake 0.5s ease-in-out;
+}
+
+@keyframes errorShake {
+  0%, 100% { transform: translateX(0); }
+  25% { transform: translateX(-10px); }
+  75% { transform: translateX(10px); }
+}
+
+/* Автоисчезновение */
+.error-message.hiding {
+  animation: errorDisappear 0.3s ease-out forwards;
+}
+
+@keyframes errorDisappear {
+  from {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1);
+  }
+  to {
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(0.9);
+  }
+}
+
+/* ========== СПИСОК ИГРОКОВ ========== */
+#playersList {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-sm);
+  max-height: 70vh;
+  overflow-y: auto;
+  padding-right: var(--gap-sm);
+}
+
+/* Кастомный скроллбар */
+#playersList::-webkit-scrollbar {
+  width: 6px;
+}
+
+#playersList::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 3px;
+}
+
+#playersList::-webkit-scrollbar-thumb {
+  background: var(--accent);
+  border-radius: 3px;
+}
+
+.player-item {
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: var(--radius-md);
+  padding: 12px;
+  display: flex;
+  align-items: center;
+  gap: var(--gap-md);
+  transition: all 0.3s ease;
+  cursor: pointer;
+  animation: playerAppear 0.4s ease-out;
+}
+
+@keyframes playerAppear {
+  from {
+    opacity: 0;
+    transform: translateX(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+.player-item:hover {
+  background: rgba(255, 255, 255, 0.06);
+  border-color: var(--accent);
+  transform: translateX(4px);
+}
+
+.player-item-avatar {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  border: 2px solid var(--accent);
+  object-fit: cover;
+  box-shadow: var(--shadow-sm);
+}
+
+.player-item-name {
+  font-weight: 600;
+  color: var(--text);
+  font-size: 0.95rem;
+}
+
+.player-item-stats {
+  font-size: 0.75rem;
+  color: var(--text-dim);
+  margin-top: 4px;
+}
+
+.player-item-role {
+  margin-left: auto;
+  padding: 4px 10px;
+  background: linear-gradient(135deg, var(--accent), var(--accent-light));
+  border-radius: var(--radius-sm);
+  font-size: 0.75rem;
+  font-weight: 600;
+  white-space: nowrap;
+  box-shadow: var(--shadow-sm);
+}
+
+/* Топ игроки */
+.player-item.top1 {
+  background: linear-gradient(135deg, rgba(255, 215, 0, 0.1), rgba(255, 165, 0, 0.1));
+  border-color: rgba(255, 215, 0, 0.3);
+}
+
+.player-item.top2 {
+  background: linear-gradient(135deg, rgba(192, 192, 192, 0.1), rgba(169, 169, 169, 0.1));
+  border-color: rgba(192, 192, 192, 0.3);
+}
+
+/* ========== КНОПКА ЛАЙКА ========== */
+.like-btn {
+  background: linear-gradient(135deg, #ec4899, #f43f5e);
+  padding: 6px 12px;
+  font-size: 0.75rem;
+  margin-top: 8px;
+  animation: likeAppear 0.3s ease-out;
+}
+
+@keyframes likeAppear {
+  from {
+    opacity: 0;
+    transform: scale(0.8);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.like-btn:hover {
+  box-shadow: 0 0 20px rgba(236, 72, 153, 0.6);
+}
+
+/* ========== СТАТИСТИКА ========== */
+.stat {
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: var(--radius-sm);
+  padding: 8px 12px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  transition: all 0.2s ease;
+}
+
+.stat:hover {
+  background: rgba(255, 255, 255, 0.06);
+  border-color: var(--accent);
+}
+
+.stat-label {
+  font-size: 0.75rem;
+  color: var(--text-dim);
+  font-weight: 500;
+}
+
+.stat-value {
+  font-weight: 700;
+  color: var(--text);
+  font-size: 0.9rem;
+}
+
+/* ========== СОБЫТИЯ ========== */
+.event-item {
+  padding: 8px 12px;
+  margin-bottom: 6px;
+  background: rgba(255, 255, 255, 0.03);
+  border-left: 3px solid var(--accent);
+  border-radius: var(--radius-sm);
+  font-size: 0.75rem;
+  animation: eventSlide 0.3s ease-out;
+  transition: all 0.2s ease;
+}
+
+@keyframes eventSlide {
+  from {
+    opacity: 0;
+    transform: translateX(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+.event-item:hover {
+  background: rgba(255, 255, 255, 0.06);
+  transform: translateX(4px);
+}
+
+/* ========== АДМИН ПАНЕЛЬ ========== */
+#adminPanel {
+  background: linear-gradient(135deg, rgba(99, 102, 241, 0.1), rgba(139, 92, 246, 0.1));
+  border: 1px solid var(--accent);
+  animation: adminAppear 0.5s ease-out;
+}
+
+@keyframes adminAppear {
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.player-actions button {
+  width: 100%;
+  margin-bottom: var(--gap-sm);
+}
+
+/* ========== СЧЕТЧИК ОНЛАЙН ========== */
+.online-counter {
+  position: fixed;
+  top: var(--gap-lg);
+  right: var(--gap-lg);
+  background: var(--bg-card);
+  backdrop-filter: blur(20px);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  padding: 12px 20px;
+  display: flex;
+  align-items: center;
+  gap: var(--gap-sm);
+  box-shadow: var(--shadow-md);
+  z-index: 100;
+  animation: counterAppear 0.5s ease-out;
+}
+
+@keyframes counterAppear {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.online-dot {
+  width: 10px;
+  height: 10px;
+  background: var(--success);
+  border-radius: 50%;
+  animation: pulse 2s ease-in-out infinite;
+  box-shadow: 0 0 10px var(--success);
+}
+
+@keyframes pulse {
+  0%, 100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  50% {
+    transform: scale(1.2);
+    opacity: 0.8;
+  }
+}
+
+/* ========== АДАПТИВНОСТЬ ========== */
+@media (max-width: 1200px) {
+  #gameContainer {
+    grid-template-columns: 1fr 1.5fr;
+    grid-template-rows: auto auto 1fr;
+  }
+}
+
+@media (max-width: 768px) {
+  #gameContainer {
+    grid-template-columns: 1fr;
+    padding: var(--gap-md);
+    gap: var(--gap-md);
+  }
+
+  .section {
+    padding: var(--gap-md);
+  }
+
+  .online-counter {
+    top: var(--gap-md);
+    right: var(--gap-md);
+    padding: 8px 16px;
+    font-size: 0.85rem;
+  }
+
+  h3 {
+    font-size: 0.9rem;
+  }
+
+  .error-message {
+    max-width: 90%;
+    min-width: unset;
+    padding: 20px 24px;
+    font-size: 0.9rem;
+  }
+}
+
+/* ========== АНИМАЦИИ ЗАГРУЗКИ ========== */
+@keyframes shimmer {
+  0% {
+    background-position: -1000px 0;
+  }
+  100% {
+    background-position: 1000px 0;
+  }
+}
+
+.loading {
+  animation: shimmer 2s infinite;
+  background: linear-gradient(
+    90deg,
+    rgba(255, 255, 255, 0.02) 0%,
+    rgba(255, 255, 255, 0.05) 50%,
+    rgba(255, 255, 255, 0.02) 100%
+  );
+  background-size: 1000px 100%;
+}
