@@ -6,7 +6,7 @@
 .player-block {
   display: flex;
   flex-direction: column;
-  gap: var(--gap-lg);
+  gap: var(--gap-md);
 }
 
 /* ========== ЗАГОЛОВОК ИГРОКА ========== */
@@ -46,29 +46,34 @@
 /* ========== КНОПКА ЗАГРУЗКИ АВАТАРА ========== */
 .avatar-upload-btn {
   position: absolute;
-  bottom: -8px;
+  bottom: -6px;
   left: 50%;
   transform: translateX(-50%);
   background: linear-gradient(135deg, var(--accent), var(--accent-light));
   color: white;
-  padding: 4px 10px;
-  border-radius: 6px;
-  font-size: 0.7rem;
+  padding: 3px 8px;
+  border-radius: 5px;
+  font-size: 0.65rem;
   font-weight: 600;
   cursor: pointer;
   transition: all 0.3s ease;
   white-space: nowrap;
   box-shadow: 
-    0 2px 8px rgba(99, 102, 241, 0.4),
+    0 2px 6px rgba(99, 102, 241, 0.4),
     inset 0 1px 0 rgba(255, 255, 255, 0.2);
   z-index: 2;
+  line-height: 1.2;
 }
 
 .avatar-upload-btn:hover {
-  transform: translateX(-50%) translateY(-2px);
+  transform: translateX(-50%) translateY(-3px);
   box-shadow: 
     0 4px 12px rgba(99, 102, 241, 0.6),
     inset 0 1px 0 rgba(255, 255, 255, 0.3);
+}
+
+.avatar-upload-btn:active {
+  transform: translateX(-50%) translateY(-1px);
 }
 
 /* ========== ИНФОРМАЦИЯ ОБ ИГРОКЕ ========== */
@@ -123,19 +128,22 @@
 
 /* ========== СТАТИСТИКА ИГРОКА ========== */
 .player-stats {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 10px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
 }
 
 .player-stats .stat {
   background: rgba(255, 255, 255, 0.03);
   border: 1px solid rgba(255, 255, 255, 0.1);
   border-radius: var(--radius-md);
-  padding: 12px;
+  padding: 8px 12px;
   display: flex;
   justify-content: space-between;
   align-items: center;
+  gap: 8px;
+  flex: 1 1 40%;
+  min-width: 110px;
   transition: all 0.3s ease;
 }
 
@@ -147,29 +155,32 @@
 }
 
 .player-stats .stat-label {
-  font-size: 0.8rem;
+  font-size: 0.7rem;
   color: var(--text-dim);
   font-weight: 500;
+  white-space: nowrap;
 }
 
 .player-stats .stat-value,
 .player-stats .stat span:not(.stat-label) {
   font-weight: 700;
   color: var(--text);
-  font-size: 1rem;
+  font-size: 0.9rem;
+  white-space: nowrap;
 }
 
 /* ========== ДЕЙСТВИЯ ИГРОКА ========== */
 .player-actions {
   display: flex;
-  flex-direction: column;
+  flex-wrap: wrap;
   gap: 10px;
   padding-top: var(--gap-md);
   border-top: 1px solid rgba(255, 255, 255, 0.1);
 }
 
 .player-actions button {
-  width: 100%;
+  flex: 1;
+  min-width: 140px;
   padding: 12px;
   font-size: 0.9rem;
   font-weight: 600;
@@ -518,7 +529,12 @@
   }
 
   .player-stats {
-    grid-template-columns: 1fr;
+    gap: 6px;
+  }
+  
+  .player-stats .stat {
+    flex: 1 1 40%;
+    padding: 8px 10px;
   }
 
   /* Список игроков */
@@ -576,6 +592,15 @@
 
   .player-stats .stat {
     padding: 10px;
+  }
+  
+  /* Кнопки в колонку на мобильных */
+  .player-actions {
+    flex-direction: column;
+  }
+  
+  .player-actions button {
+    width: 100%;
   }
 
   /* Список игроков */
