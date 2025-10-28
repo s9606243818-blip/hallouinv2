@@ -13,6 +13,7 @@ import avatarUpload from './modules/avatarUpload.js';
 import sounds from './utils/sounds.js';
 import vibration from './utils/vibration.js';
 import buttonTimers from './utils/buttonTimers.js';
+import floatingNumbers from './utils/floatingNumbers.js';
 import { getElement, showError } from './utils/helpers.js';
 
 class Game {
@@ -301,10 +302,14 @@ class Game {
     socket.on('playerUpdate', (player) => {
       console.log('🔄 Обновление игрока:', player);
       
-      // Проверяем - изменилось ли HP
+      // Проверяем - изменилось ли HP/EXP/Level
       if (this.currentPlayer && player.socketId === this.currentPlayer.socketId) {
         const oldHP = this.currentPlayer.hp;
+        const oldEXP = this.currentPlayer.exp;
+        const oldLevel = this.currentPlayer.level;
         const newHP = player.hp;
+        const newEXP = player.exp;
+        const newLevel = player.level;
         
         // HP упало до 0
         if (newHP === 0 && oldHP > 0) {
@@ -315,11 +320,28 @@ class Game {
         else if (newHP > oldHP) {
           sounds.success();
           vibration.short();
+          const hpGained = newHP - oldHP;
+          floatingNumbers.showHpGain(hpGained, getElement('playerHP'));
         }
         // HP упало
         else if (newHP < oldHP) {
           sounds.notification();
           vibration.short();
+          const hpLost = oldHP - newHP;
+          floatingNumbers.showHpLoss(hpLost, getElement('playerHP'));
+        }
+        
+        // EXP увеличился
+        if (newEXP > oldEXP) {
+          const expGained = newEXP - oldEXP;
+          floatingNumbers.showExpGain(expGained, getElement('playerEXP'));
+        }
+        
+        // Level Up!
+        if (newLevel > oldLevel) {
+          floatingNumbers.showLevelUp(newLevel, getElement('playerLevel'));
+          sounds.admin(); // Торжественный звук
+          vibration.pattern();
         }
       }
       
