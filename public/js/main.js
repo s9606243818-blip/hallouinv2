@@ -240,8 +240,7 @@ class Game {
       window.currentPlayerSocketId = player.socketId;
       ui.hideModal('loginModal');
       
-      // Звук и вибрация входа
-      sounds.join();
+      // Вибрация входа
       vibration.success();
       
       const gameContainer = getElement('gameContainer');
@@ -367,7 +366,7 @@ class Game {
           break;
         case 'join':
         case 'reconnect':
-          sounds.join();
+          // Звук входа/выхода убран
           vibration.short();
           break;
         default:

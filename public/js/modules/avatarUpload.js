@@ -27,8 +27,8 @@ class AvatarUpload {
       return;
     }
 
-    if (file.size > 500 * 1024) {
-      showError('Файл слишком большой (макс 500KB)');
+    if (file.size > 2 * 1024 * 1024) {
+      showError('Файл слишком большой (макс 2MB)');
       return;
     }
 
