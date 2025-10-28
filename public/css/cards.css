@@ -5,6 +5,9 @@
 /* ========== СЕКЦИЯ КАРТ ========== */
 .cards-section {
   margin-bottom: var(--gap-lg);
+  padding: var(--gap-md);
+  border-radius: var(--radius-md);
+  transition: all 0.3s ease;
 }
 
 .cards-section h4 {

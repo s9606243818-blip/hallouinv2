@@ -12,6 +12,7 @@ import eventsUI from './modules/eventsUI.js';
 import avatarUpload from './modules/avatarUpload.js';
 import sounds from './utils/sounds.js';
 import vibration from './utils/vibration.js';
+import buttonTimers from './utils/buttonTimers.js';
 import { getElement, showError } from './utils/helpers.js';
 
 class Game {
@@ -149,37 +150,85 @@ class Game {
     const cardsBtn = getElement('requestCardsBtn');
     const musicBtn = getElement('requestMusicBtn');
 
+    // Инициализируем кнопки с таймерами
     if (healBtn) {
+      buttonTimers.initButton('heal', healBtn);
+      
       healBtn.addEventListener('click', () => {
+        // Проверяем таймер
+        if (!buttonTimers.canUse('heal')) {
+          const timeLeft = buttonTimers.getTimeLeft('heal');
+          const minutes = Math.floor(timeLeft / 60000);
+          const seconds = Math.floor((timeLeft % 60000) / 1000);
+          showError(`Подождите ещё ${minutes}:${seconds.toString().padStart(2, '0')}`);
+          vibration.fail();
+          return;
+        }
+
         socket.sendRequestToRole('healer', 'heal');
         sounds.notification();
         vibration.short();
+        
+        // Запускаем таймер
+        buttonTimers.startTimer('heal', healBtn);
       });
     }
 
     if (cardsBtn) {
+      buttonTimers.initButton('cards', cardsBtn);
+      
       cardsBtn.addEventListener('click', () => {
         if (this.currentPlayer && this.currentPlayer.hp <= 0) {
           cardsUI.showNeedsHealingMessage();
           vibration.fail();
           return;
         }
+        
+        // Проверяем таймер
+        if (!buttonTimers.canUse('cards')) {
+          const timeLeft = buttonTimers.getTimeLeft('cards');
+          const minutes = Math.floor(timeLeft / 60000);
+          const seconds = Math.floor((timeLeft % 60000) / 1000);
+          showError(`Подождите ещё ${minutes}:${seconds.toString().padStart(2, '0')}`);
+          vibration.fail();
+          return;
+        }
+        
         socket.sendRequestToRole('dealer', 'cards');
         sounds.notification();
         vibration.short();
+        
+        // Запускаем таймер
+        buttonTimers.startTimer('cards', cardsBtn);
       });
     }
 
     if (musicBtn) {
+      buttonTimers.initButton('music', musicBtn);
+      
       musicBtn.addEventListener('click', () => {
         if (this.currentPlayer && this.currentPlayer.hp <= 0) {
           cardsUI.showNeedsHealingMessage();
           vibration.fail();
           return;
         }
+        
+        // Проверяем таймер
+        if (!buttonTimers.canUse('music')) {
+          const timeLeft = buttonTimers.getTimeLeft('music');
+          const minutes = Math.floor(timeLeft / 60000);
+          const seconds = Math.floor((timeLeft % 60000) / 1000);
+          showError(`Подождите ещё ${minutes}:${seconds.toString().padStart(2, '0')}`);
+          vibration.fail();
+          return;
+        }
+        
         socket.sendRequestToRole('dj', 'music');
         sounds.notification();
         vibration.short();
+        
+        // Запускаем таймер
+        buttonTimers.startTimer('music', musicBtn);
       });
     }
   }

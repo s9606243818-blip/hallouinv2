@@ -31,12 +31,12 @@
             <div class="player-header">
                 <div class="player-avatar-wrapper">
                     <img id="playerAvatar" src="/avatars/default.svg" alt="Avatar" class="player-avatar">
-                    <label for="avatarUpload" class="avatar-upload-btn">Загрузить аватарку</label>
-                    <input type="file" id="avatarUpload" accept="image/jpeg,image/png" style="display: none;">
                 </div>
                 <div class="player-info">
                     <h3 id="playerNickname">Игрок</h3>
                     <div class="player-role" id="playerRole">Без роли</div>
+                    <label for="avatarUpload" class="avatar-upload-btn">📷 Загрузить</label>
+                    <input type="file" id="avatarUpload" accept="image/jpeg,image/png" style="display: none;">
                 </div>
             </div>
             
@@ -70,6 +70,11 @@
             <h3>Ваши карты</h3>
             
             <div class="cards-section">
+                <h4>Активные задания</h4>
+                <div id="activeTasks" class="tasks-list"></div>
+            </div>
+
+            <div class="cards-section">
                 <h4>Карты действий <span id="actionCardsCount">(0/10)</span></h4>
                 <div id="actionCards" class="cards-list"></div>
             </div>
@@ -77,11 +82,6 @@
             <div class="cards-section">
                 <h4>Карты ролей <span id="roleCardsCount">(0/1)</span></h4>
                 <div id="roleCards" class="cards-list"></div>
-            </div>
-
-            <div class="cards-section">
-                <h4>Активные задания</h4>
-                <div id="activeTasks" class="tasks-list"></div>
             </div>
         </div>
 

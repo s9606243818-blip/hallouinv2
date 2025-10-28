@@ -13,8 +13,8 @@
 .player-header {
   display: flex;
   align-items: center;
-  gap: var(--gap-lg);
-  padding-bottom: var(--gap-lg);
+  gap: var(--gap-md);
+  padding-bottom: 0px;
   border-bottom: 1px solid rgba(255, 255, 255, 0.1);
 }
 
@@ -45,15 +45,14 @@
 
 /* ========== КНОПКА ЗАГРУЗКИ АВАТАРА ========== */
 .avatar-upload-btn {
-  position: absolute;
-  bottom: -6px;
-  left: 50%;
-  transform: translateX(-50%);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
   background: linear-gradient(135deg, var(--accent), var(--accent-light));
   color: white;
-  padding: 3px 8px;
-  border-radius: 5px;
-  font-size: 0.65rem;
+  padding: 6px 12px;
+  border-radius: 8px;
+  font-size: 0.75rem;
   font-weight: 600;
   cursor: pointer;
   transition: all 0.3s ease;
@@ -61,28 +60,30 @@
   box-shadow: 
     0 2px 6px rgba(99, 102, 241, 0.4),
     inset 0 1px 0 rgba(255, 255, 255, 0.2);
-  z-index: 2;
-  line-height: 1.2;
+  border: none;
+  flex-shrink: 0;
 }
 
 .avatar-upload-btn:hover {
-  transform: translateX(-50%) translateY(-3px);
+  transform: translateY(-2px);
   box-shadow: 
     0 4px 12px rgba(99, 102, 241, 0.6),
     inset 0 1px 0 rgba(255, 255, 255, 0.3);
 }
 
 .avatar-upload-btn:active {
-  transform: translateX(-50%) translateY(-1px);
+  transform: translateY(0);
 }
 
 /* ========== ИНФОРМАЦИЯ ОБ ИГРОКЕ ========== */
 .player-info {
   flex: 1;
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   gap: 8px;
   min-width: 0;
+  flex-wrap: wrap;
+  align-items: center;
 }
 
 .player-info h3 {
@@ -95,6 +96,7 @@
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+  flex-shrink: 1;
 }
 
 .player-info h3::before {
@@ -115,8 +117,8 @@
     0 2px 8px rgba(99, 102, 241, 0.3),
     inset 0 1px 0 rgba(255, 255, 255, 0.2);
   text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
-  align-self: flex-start;
   transition: all 0.3s ease;
+  flex-shrink: 0;
 }
 
 .player-role:hover {
@@ -172,6 +174,7 @@
 /* ========== ДЕЙСТВИЯ ИГРОКА ========== */
 .player-actions {
   display: flex;
+  flex-direction: row;
   flex-wrap: wrap;
   gap: 10px;
   padding-top: var(--gap-md);
@@ -179,10 +182,10 @@
 }
 
 .player-actions button {
-  flex: 1;
-  min-width: 140px;
+  flex: 1 1 auto;
+  min-width: 120px;
   padding: 12px;
-  font-size: 0.9rem;
+  font-size: 0.85rem;
   font-weight: 600;
   border-radius: var(--radius-md);
   transition: all 0.3s ease;
@@ -190,6 +193,18 @@
 
 .player-actions button:hover {
   transform: translateY(-2px);
+}
+
+/* Кнопка с активным таймером */
+.player-actions button.timer-active {
+  background: linear-gradient(135deg, rgba(255, 152, 0, 0.6), rgba(251, 146, 60, 0.6));
+  cursor: not-allowed;
+  opacity: 0.7;
+}
+
+.player-actions button.timer-active:hover {
+  transform: none;
+  box-shadow: var(--shadow-sm);
 }
 
 /* ========== КОНТЕЙНЕР СПИСКА ИГРОКОВ ========== */
@@ -523,6 +538,11 @@
     width: 64px;
     height: 64px;
   }
+  
+  .player-info {
+    flex-direction: row;
+    flex-wrap: wrap;
+  }
 
   .player-info h3 {
     font-size: 1.1rem;
@@ -535,6 +555,19 @@
   .player-stats .stat {
     flex: 1 1 40%;
     padding: 8px 10px;
+  }
+  
+  /* Кнопки в ряд на планшетах */
+  .player-actions {
+    flex-direction: row;
+    gap: 8px;
+  }
+  
+  .player-actions button {
+    flex: 1 1 auto;
+    min-width: 100px;
+    font-size: 0.8rem;
+    padding: 10px 8px;
   }
 
   /* Список игроков */
@@ -567,40 +600,81 @@
     font-size: 0.75rem;
     padding: 7px 14px;
   }
+  
+  .avatar-upload-btn {
+    font-size: 0.7rem;
+    padding: 5px 10px;
+  }
 }
 
 @media (max-width: 480px) {
   /* Основной блок игрока */
   .player-header {
-    flex-direction: column;
-    align-items: flex-start;
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-items: center;
   }
 
   .player-avatar {
     width: 56px;
     height: 56px;
   }
+  
+  .player-info {
+    flex: 1;
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 6px;
+  }
 
   .player-info h3 {
-    font-size: 1rem;
+    font-size: 0.9rem;
+    flex: 0 1 auto;
   }
 
   .player-role {
-    font-size: 0.75rem;
-    padding: 5px 12px;
+    font-size: 0.7rem;
+    padding: 4px 10px;
+    flex: 0 0 auto;
+  }
+  
+  .avatar-upload-btn {
+    font-size: 0.65rem;
+    padding: 4px 8px;
+    flex: 0 0 auto;
+  }
+
+  .player-stats {
+    gap: 6px;
   }
 
   .player-stats .stat {
-    padding: 10px;
+    flex: 1 1 21%;  /* 4 элемента в ряд */
+    padding: 8px 6px;
+    min-width: 70px;
   }
   
-  /* Кнопки в колонку на мобильных */
+  .player-stats .stat-label {
+    font-size: 0.65rem;
+  }
+  
+  .player-stats .stat-value,
+  .player-stats .stat span:not(.stat-label) {
+    font-size: 0.8rem;
+  }
+  
+  /* Кнопки в ряд на мобильных */
   .player-actions {
-    flex-direction: column;
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 6px;
   }
   
   .player-actions button {
-    width: 100%;
+    flex: 1 1 30%;  /* 3 кнопки в ряд */
+    min-width: 90px;
+    font-size: 0.7rem;
+    padding: 10px 4px;
   }
 
   /* Список игроков */

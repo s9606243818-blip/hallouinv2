@@ -16,6 +16,9 @@ class TasksUI {
     const container = getElement('activeTasks');
     if (!container) return;
 
+    const hadTasks = container.children.length > 0;
+    const previousTasksCount = container.querySelectorAll('.task-card').length;
+
     clearContainer(container);
     this.clearAllTimers();
 
@@ -32,6 +35,42 @@ class TasksUI {
         this.startTimer(task);
       }
     });
+
+    // Автопрокрутка к заданиям если:
+    // 1. Появились новые задания (было меньше, стало больше)
+    // 2. Или если до этого не было заданий
+    if (tasks.length > previousTasksCount || !hadTasks) {
+      this.scrollToTasks();
+    }
+  }
+
+  /**
+   * Плавная прокрутка к блоку активных заданий
+   */
+  scrollToTasks() {
+    const tasksContainer = getElement('activeTasks');
+    if (!tasksContainer) return;
+
+    // Находим родительский блок карт
+    const cardsBlock = tasksContainer.closest('.cards-block');
+    if (!cardsBlock) return;
+
+    // Небольшая задержка для плавности
+    setTimeout(() => {
+      cardsBlock.scrollIntoView({ 
+        behavior: 'smooth', 
+        block: 'start'
+      });
+
+      // Подсветка на секунду
+      const section = tasksContainer.closest('.cards-section');
+      if (section) {
+        section.classList.add('highlight');
+        setTimeout(() => {
+          section.classList.remove('highlight');
+        }, 2000);
+      }
+    }, 100);
   }
 
   createActiveTaskElement(task, currentSocketId) {
