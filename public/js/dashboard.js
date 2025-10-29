@@ -98,7 +98,6 @@ function renderPlayers(players) {
           <img src="${player.avatar || '/avatars/default.png'}" alt="${player.nickname}" class="player-avatar">
           <div>
             <div class="player-name">${statusEmoji} ${player.nickname}</div>
-            <div style="opacity: 0.8; font-size: 0.9rem;">${isDead ? 'Ждёт лечения' : 'В игре'}</div>
           </div>
           <div class="player-role">${roleLabel}</div>
         </div>
@@ -108,7 +107,7 @@ function renderPlayers(players) {
             <div class="stat-value">${player.hp}/100</div>
           </div>
           <div class="stat">
-            <div class="stat-label">⭐ Level</div>
+            <div class="stat-label">⭐ LVL</div>
             <div class="stat-value">${player.level}</div>
           </div>
         </div>
