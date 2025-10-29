@@ -75,7 +75,8 @@ class PlayerManager {
       hp: player.hp,
       likes: player.likes,
       likedBy: player.likedBy,
-      hasGivenLike: this.hasGivenLike(player.nickname)
+      hasGivenLike: this.hasGivenLike(player.nickname),
+      activeTasks: player.activeTasks || [] // 📊 Для dashboard!
     }));
   }
 
