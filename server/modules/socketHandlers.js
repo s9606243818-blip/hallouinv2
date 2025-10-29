@@ -97,6 +97,9 @@ function setupSocketHandlers(io) {
           });
 
           socket.emit('playerUpdate', playerManager.getPlayerData(player));
+          
+          // 📊 Dashboard update
+          io.emit('playersUpdate', playerManager.getPlayersList());
 
           io.emit('notification', {
             message: `${player.nickname} отменил задание! ${creator ? creator.nickname : 'Отправитель'} -20 HP`,
@@ -114,6 +117,9 @@ function setupSocketHandlers(io) {
               const target = gameState.getPlayer(targetSocketId);
               io.to(targetSocketId).emit('playerUpdate', playerManager.getPlayerData(target));
             }
+            
+            // 📊 Dashboard update
+            io.emit('playersUpdate', playerManager.getPlayersList());
             
             io.emit('notification', {
               message: `${player.nickname} использовал карту: ${result.card.name}`,
@@ -141,6 +147,9 @@ function setupSocketHandlers(io) {
           socket.emit('playerUpdate', playerManager.getPlayerData(player));
           io.to(targetSocketId1).emit('playerUpdate', playerManager.getPlayerData(target1));
           io.to(targetSocketId2).emit('playerUpdate', playerManager.getPlayerData(target2));
+          
+          // 📊 Dashboard update
+          io.emit('playersUpdate', playerManager.getPlayersList());
           
           io.emit('notification', {
             message: `${player.nickname} дал задание: ${result.card.name} для ${target1.nickname} и ${target2.nickname}`,
