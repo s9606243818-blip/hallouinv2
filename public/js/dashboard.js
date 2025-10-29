@@ -156,14 +156,14 @@ function renderTasks() {
     }
     
     return `
-      <div class="task-card">
+      <div class="task-card" data-task-id="${task.id}">
         <div class="task-header">🎯 ${task.cardName}</div>
         <div class="task-players">
           👤 ${task.creatorNickname} → ${participants}
         </div>
         ${task.description ? `<div style="opacity: 0.7; margin-bottom: 8px; font-size: 0.8rem;">${task.description}</div>` : ''}
-        <div class="task-timer ${timerClass}">
-          ⏱️ ${timeStr}
+        <div class="task-timer ${timerClass}" data-timer-id="${task.id}">
+          ⏱️ <span class="timer-value">${timeStr}</span>
         </div>
       </div>
     `;
@@ -171,6 +171,37 @@ function renderTasks() {
   
   // Оборачиваем в grid
   container.innerHTML = `<div class="tasks-grid">${tasksHTML}</div>`;
+}
+
+// Обновление только таймеров (без перерисовки всего)
+function updateTimersOnly() {
+  if (!activeTasks || activeTasks.length === 0) return;
+  
+  const now = Date.now();
+  
+  activeTasks.forEach(task => {
+    const timerElement = document.querySelector(`[data-timer-id="${task.id}"]`);
+    if (!timerElement) return;
+    
+    const timeLeft = Math.max(0, Math.floor((task.expiresAt - now) / 1000));
+    const minutes = Math.floor(timeLeft / 60);
+    const seconds = timeLeft % 60;
+    const timeStr = `${minutes}:${seconds.toString().padStart(2, '0')}`;
+    
+    // Обновляем только текст
+    const valueSpan = timerElement.querySelector('.timer-value');
+    if (valueSpan) {
+      valueSpan.textContent = timeStr;
+    }
+    
+    // Обновляем класс для анимации
+    timerElement.classList.remove('warning', 'critical');
+    if (timeLeft <= 10) {
+      timerElement.classList.add('critical');
+    } else if (timeLeft <= 30) {
+      timerElement.classList.add('warning');
+    }
+  });
 }
 
 // Добавить событие
@@ -216,6 +247,6 @@ function renderEvents() {
 // Обновление таймеров каждую секунду
 setInterval(() => {
   if (activeTasks.length > 0) {
-    renderTasks();
+    updateTimersOnly(); // Только таймеры, без перерисовки!
   }
 }, 1000);
