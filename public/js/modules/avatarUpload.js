@@ -53,6 +53,9 @@ class AvatarUpload {
           avatar.src = data.avatarPath + '?t=' + Date.now();
         }
         
+        // 💾 Сохраняем аватар
+        localStorage.setItem('playerAvatar', data.avatarPath);
+        
         // Отправить на сервер для обновления всем
         socket.updateAvatar(data.avatarPath);
         

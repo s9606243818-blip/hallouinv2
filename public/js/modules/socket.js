@@ -92,6 +92,14 @@ class SocketClient {
       reconnectionDelayMax: 5000,      // Максимальная задержка (5 сек)
       timeout: 20000,                  // Таймаут подключения (20 сек)
       transports: ['websocket', 'polling'], // Websocket + fallback на polling
+      
+      // 📱 КРИТИЧНО для мобильных: увеличиваем таймауты до 10 МИНУТ
+      pingTimeout: 600000,             // 10 минут до отключения
+      pingInterval: 25000,             // Проверка каждые 25 сек
+      
+      // Дополнительные настройки
+      forceNew: false,                 // Повторно использовать существующее соединение
+      multiplex: true,                 // Множественные сокеты через одно соединение
     });
     
     this.setupSocketHandlers();

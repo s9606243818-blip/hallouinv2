@@ -139,7 +139,8 @@ class CardsUI {
   getTypeLabel(type) {
     const labels = {
       other: 'На другого',
-      both: 'На двоих'
+      both: 'На двоих',
+      cancel_task: 'На себя'
     };
     return labels[type] || type;
   }
@@ -152,6 +153,12 @@ class CardsUI {
   handleCardClick(card, isBlocked) {
     if (isBlocked) {
       this.showNeedsHealingMessage();
+      return;
+    }
+
+    // 🚫 Специальная обработка для карты "Отмена задания"
+    if (card.type === 'cancel_task') {
+      socket.useActionCard(card.id, null);
       return;
     }
 

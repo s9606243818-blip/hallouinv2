@@ -29,6 +29,7 @@ class Game {
     ui.initModalHandlers();
 
     this.initLoginHandlers();
+    this.initLogoutHandler();
     this.initAdminHandlers();
     this.initSocketHandlers();
     this.initCardHandlers();
@@ -56,6 +57,23 @@ class Game {
     const nicknameInput = getElement('nicknameInput');
 
     if (joinBtn && nicknameInput) {
+      // 💾 Автозаполнение из localStorage
+      const savedNickname = localStorage.getItem('playerNickname');
+      if (savedNickname) {
+        nicknameInput.value = savedNickname;
+        
+        // 🚀 Автоматический вход
+        const autoLogin = localStorage.getItem('autoLogin');
+        if (autoLogin === 'true') {
+          setTimeout(() => {
+            if (savedNickname.length >= 2) {
+              const savedAvatar = localStorage.getItem('playerAvatar');
+              socket.join(savedNickname, savedAvatar);
+            }
+          }, 500); // Небольшая задержка для соединения
+        }
+      }
+
       joinBtn.addEventListener('click', () => {
         const nickname = nicknameInput.value.trim();
         if (nickname.length < 2) {
@@ -63,12 +81,33 @@ class Game {
           vibration.short();
           return;
         }
+        
+        // 💾 Сохраняем никейм
+        localStorage.setItem('playerNickname', nickname);
+        localStorage.setItem('autoLogin', 'true');
+        
         socket.join(nickname);
       });
 
       nicknameInput.addEventListener('keypress', (e) => {
         if (e.key === 'Enter') {
           joinBtn.click();
+        }
+      });
+    }
+  }
+
+  initLogoutHandler() {
+    const logoutBtn = getElement('logoutBtn');
+    
+    if (logoutBtn) {
+      logoutBtn.addEventListener('click', () => {
+        if (confirm('Вы уверены, что хотите выйти?')) {
+          // 💾 Отключаем автовход
+          localStorage.setItem('autoLogin', 'false');
+          
+          // 🔄 Перезагружаем страницу
+          location.reload();
         }
       });
     }
@@ -246,6 +285,12 @@ class Game {
       console.log('✅ Вход успешен:', player);
       this.currentPlayer = player;
       window.currentPlayerSocketId = player.socketId;
+      
+      // 💾 Сохраняем аватар
+      if (player.avatar) {
+        localStorage.setItem('playerAvatar', player.avatar);
+      }
+      
       ui.hideModal('loginModal');
       
       // Вибрация входа

@@ -12,7 +12,15 @@ const setupSocketHandlers = require('./modules/socketHandlers');
 
 const app = express();
 const server = http.createServer(app);
-const io = socketIO(server);
+const io = socketIO(server, {
+  // 📱 Настройки для мобильных устройств - 10 МИНУТ
+  pingTimeout: 600000,     // 10 минут до отключения
+  pingInterval: 25000,     // Проверка каждые 25 сек
+  cors: {
+    origin: "*",
+    methods: ["GET", "POST"]
+  }
+});
 
 const PORT = process.env.PORT || 3000;
 
