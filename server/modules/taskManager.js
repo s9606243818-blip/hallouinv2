@@ -335,6 +335,44 @@ class TaskManager {
       console.log(`  ✓ Таймер остановлен`);
     }
   }
+
+  /**
+   * Проверка и удаление истекших заданий
+   */
+  cleanupExpiredTasks() {
+    console.log('🧽 Проверка истекших заданий...');
+    const now = Date.now();
+    const allPlayers = gameState.getAllPlayers();
+    const expiredTaskIds = new Set();
+
+    // Находим все истекшие задания
+    allPlayers.forEach(player => {
+      player.activeTasks.forEach(task => {
+        if (task.expiresAt && task.expiresAt < now) {
+          expiredTaskIds.add(task.id);
+          console.log(`  ⏰ Задание #${task.id} истекло (${Math.floor((now - task.expiresAt) / 1000)} сек назад)`);
+        }
+      });
+    });
+
+    // Удаляем истекшие задания без наказания (игроков не было онлайн)
+    expiredTaskIds.forEach(taskId => {
+      this.removeTask(taskId);
+    });
+
+    if (expiredTaskIds.size > 0) {
+      console.log(`✅ Удалено ${expiredTaskIds.size} истекших заданий`);
+      
+      // Обновляем всех игроков
+      if (this.io) {
+        this.io.emit('playersUpdate', playerManager.getPlayersList());
+      }
+    } else {
+      console.log('✅ Истекших заданий нет');
+    }
+
+    return expiredTaskIds.size;
+  }
 }
 
 module.exports = new TaskManager();

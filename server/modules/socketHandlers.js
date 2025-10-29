@@ -29,6 +29,9 @@ function setupSocketHandlers(io) {
       const result = playerManager.joinPlayer(socket.id, nickname, avatar);
       
       if (result.success) {
+        // 🧽 Очистка истекших заданий при входе
+        taskManager.cleanupExpiredTasks();
+        
         cardManager.dealInitialCards(socket.id);
         const player = gameState.getPlayer(socket.id);
         
