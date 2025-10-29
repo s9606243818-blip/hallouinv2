@@ -5,6 +5,7 @@
 const socket = io();
 let activeTasks = [];
 let events = [];
+let playersData = []; // 👥 Список игроков с аватарками
 const MAX_EVENTS = 20;
 
 // Подключение
@@ -22,6 +23,7 @@ socket.on('playersCount', (count) => {
 socket.on('dashboardState', (state) => {
   console.log('📊 Получено состояние:', state);
   if (state.players) {
+    playersData = state.players; // 👥 Сохраняем игроков
     renderPlayers(state.players);
     collectTasks(state.players);
   }
@@ -33,6 +35,7 @@ socket.on('dashboardState', (state) => {
 // Обновление списка игроков
 socket.on('playersUpdate', (players) => {
   console.log('🔄 playersUpdate:', players);
+  playersData = players; // 👥 Сохраняем игроков
   renderPlayers(players);
   collectTasks(players);
 });
@@ -41,6 +44,12 @@ socket.on('playersUpdate', (players) => {
 socket.on('notification', (data) => {
   addEvent(data);
 });
+
+// Поиск аватарки игрока по нику
+function getPlayerAvatar(nickname) {
+  const player = playersData.find(p => p.nickname === nickname);
+  return player ? player.avatar : null;
+}
 
 // Собираем все активные задания
 function collectTasks(players) {
@@ -131,14 +140,29 @@ function renderTasks() {
   const tasksHTML = activeTasks.map(task => {
     console.log('📋 Task:', task);
     
-    // Определяем участников
-    let participants = '';
+    // Собираем информацию об участниках
+    const creator = {
+      nickname: task.creatorNickname,
+      avatar: getPlayerAvatar(task.creatorNickname)
+    };
+    
+    const targets = [];
+    
     if (task.targetSocketId1 && task.targetSocketId2) {
-      participants = `${task.target1Nickname} & ${task.target2Nickname}`;
-    } else if (task.type === 'other' && task.targetNickname) {
-      participants = task.targetNickname;
-    } else if (task.type === 'both' && task.targetNickname) {
-      participants = `${task.creatorNickname} & ${task.targetNickname}`;
+      // Задание "на двоих"
+      targets.push({ 
+        nickname: task.target1Nickname, 
+        avatar: getPlayerAvatar(task.target1Nickname) 
+      });
+      targets.push({ 
+        nickname: task.target2Nickname, 
+        avatar: getPlayerAvatar(task.target2Nickname) 
+      });
+    } else if (task.targetNickname) {
+      targets.push({ 
+        nickname: task.targetNickname, 
+        avatar: getPlayerAvatar(task.targetNickname) 
+      });
     }
     
     // Вычисляем оставшееся время
@@ -156,13 +180,40 @@ function renderTasks() {
       timerClass = 'warning';
     }
     
+    // HTML для участников
+    let participantsHTML = `
+      <div class="task-player">
+        <img src="${creator.avatar || '/avatars/default.png'}" class="task-player-avatar" alt="${creator.nickname}">
+        <div>
+          <div class="task-player-label">🚀 Отправил</div>
+          <div class="task-player-name">${creator.nickname}</div>
+        </div>
+      </div>
+    `;
+    
+    if (targets.length > 0) {
+      participantsHTML += '<div class="task-arrow">⬇️</div>';
+      
+      targets.forEach(target => {
+        participantsHTML += `
+          <div class="task-player">
+            <img src="${target.avatar || '/avatars/default.png'}" class="task-player-avatar" alt="${target.nickname}">
+            <div>
+              <div class="task-player-label">🎯 Выполняет</div>
+              <div class="task-player-name">${target.nickname}</div>
+            </div>
+          </div>
+        `;
+      });
+    }
+    
     return `
       <div class="task-card" data-task-id="${task.id}">
         <div class="task-header">🎯 ${task.cardName}</div>
-        <div class="task-players">
-          👤 ${task.creatorNickname} → ${participants}
+        <div class="task-participants">
+          ${participantsHTML}
         </div>
-        ${task.description ? `<div style="opacity: 0.7; margin-bottom: 8px; font-size: 0.8rem;">${task.description}</div>` : ''}
+        ${task.description ? `<div style="opacity: 0.7; margin-bottom: 8px; font-size: 0.8rem; text-align: center;">${task.description}</div>` : ''}
         <div class="task-timer ${timerClass}" data-timer-id="${task.id}">
           ⏱️ <span class="timer-value">${timeStr}</span>
         </div>
