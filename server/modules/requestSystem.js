@@ -9,11 +9,26 @@ const cardManager = require('./cardManager');
 class RequestSystem {
   constructor() {
     this.requestIdCounter = 1;
+    this.djCooldowns = new Map(); // socketId -> timestamp
   }
 
   createRequest(fromSocketId, targetRole, requestType) {
     const requester = gameState.getPlayer(fromSocketId);
     if (!requester) return { success: false, error: 'Игрок не найден' };
+
+    // Проверка кулдауна для DJ
+    if (requestType === 'music') {
+      const lastRequest = this.djCooldowns.get(fromSocketId);
+      const cooldown = 30 * 60 * 1000; // 30 минут
+      
+      if (lastRequest && Date.now() - lastRequest < cooldown) {
+        const remaining = Math.ceil((cooldown - (Date.now() - lastRequest)) / 60000);
+        return { 
+          success: false, 
+          error: `Можно запросить трек через ${remaining} мин` 
+        };
+      }
+    }
 
     console.log(`📨 Создание запроса к ${targetRole} от ${requester.nickname}`);
 
@@ -54,6 +69,11 @@ class RequestSystem {
       console.log(`Добавление задания игроку ${rolePlayer.nickname}`);
       rolePlayer.activeTasks.push({ ...task, creatorSocketId: rolePlayer.socketId });
     });
+
+    // Установить кулдаун для DJ
+    if (requestType === 'music') {
+      this.djCooldowns.set(fromSocketId, Date.now());
+    }
 
     return { 
       success: true, 
@@ -122,8 +142,11 @@ class RequestSystem {
       rp.activeTasks = rp.activeTasks.filter(t => t.id !== requestId);
     });
 
-    if (task.requestType === 'cards') {
-      playerManager.changeHP(task.fromSocketId, -20);
+    // Все роли наказывают одинаково: -40 HP
+    if (task.requestType === 'heal' || 
+        task.requestType === 'cards' || 
+        task.requestType === 'music') {
+      playerManager.changeHP(task.fromSocketId, -40);
     }
 
     return { 

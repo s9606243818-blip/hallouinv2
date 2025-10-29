@@ -96,11 +96,14 @@
         </div>
 
         <div id="adminPanel" class="admin-panel" style="display: none;">
-            <h3>Админ панель</h3>
-            <button id="adminAssignRolesBtn">Назначить роли</button>
-            <button id="adminDealCardsBtn">Раздать карты всем</button>
-            <button id="showLikesBtn">Показать лайки</button>
-            <button id="adminResetBtn">Перезапустить игру</button>
+            <h3>👑 Админ панель</h3>
+            <div class="admin-buttons">
+                <button id="adminAssignRolesBtn" class="admin-btn">🎭 Назначить роли</button>
+                <button id="adminDealCardsBtn" class="admin-btn">🎴 Раздать карты</button>
+                <button id="adminGiveCancelCardBtn" class="admin-btn admin-btn-special">🚫 Выдать Отмену</button>
+                <button id="showLikesBtn" class="admin-btn">📊 Показать лайки</button>
+                <button id="adminResetBtn" class="admin-btn admin-btn-danger">🔄 Перезапустить</button>
+            </div>
         </div>
     </div>
 
@@ -126,6 +129,15 @@
             <h3>📊 Статистика лайков</h3>
             <div id="likesStatsList" class="likes-stats"></div>
             <button class="close-modal">Закрыть</button>
+        </div>
+    </div>
+
+    <div id="giveCancelCardModal" class="modal">
+        <div class="modal-content">
+            <h3>🚫 Выдать карту "Отмена задания"</h3>
+            <p style="text-align: center; opacity: 0.8; margin-bottom: 20px; font-size: 0.9rem;">Выберите игрока, которому выдать карту</p>
+            <div id="giveCancelPlayersList" class="target-list"></div>
+            <button class="close-modal">Отмена</button>
         </div>
     </div>
 

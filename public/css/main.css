@@ -447,6 +447,57 @@ button:disabled {
   }
 }
 
+.admin-buttons {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: var(--gap-sm);
+}
+
+.admin-btn {
+  width: 100%;
+  padding: 12px 16px;
+  font-size: 0.85rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.admin-btn-special {
+  background: linear-gradient(135deg, #f59e0b, #f97316);
+}
+
+.admin-btn-special:hover {
+  box-shadow: 0 0 20px rgba(245, 158, 11, 0.6);
+}
+
+.admin-btn-danger {
+  background: linear-gradient(135deg, #ef4444, #dc2626);
+}
+
+.admin-btn-danger:hover {
+  box-shadow: 0 0 20px rgba(239, 68, 68, 0.6);
+}
+
+/* Мобильные стили для админ-панели */
+@media (max-width: 768px) {
+  .admin-buttons {
+    grid-template-columns: 1fr;
+    gap: 10px;
+  }
+  
+  .admin-btn {
+    padding: 14px 20px;
+    font-size: 0.9rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .admin-btn {
+    padding: 12px 16px;
+    font-size: 0.85rem;
+  }
+}
+
 .player-actions button {
   width: 100%;
   margin-bottom: var(--gap-sm);

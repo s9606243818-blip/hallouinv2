@@ -77,6 +77,7 @@ class Game {
   initAdminHandlers() {
     const assignRolesBtn = getElement('adminAssignRolesBtn');
     const dealCardsBtn = getElement('adminDealCardsBtn');
+    const giveCancelCardBtn = getElement('adminGiveCancelCardBtn');
     const showLikesBtn = getElement('showLikesBtn');
     const resetBtn = getElement('adminResetBtn');
 
@@ -89,6 +90,12 @@ class Game {
     if (dealCardsBtn) {
       dealCardsBtn.addEventListener('click', () => {
         socket.adminDealCards();
+      });
+    }
+
+    if (giveCancelCardBtn) {
+      giveCancelCardBtn.addEventListener('click', () => {
+        ui.showGiveCancelCardModal();
       });
     }
 

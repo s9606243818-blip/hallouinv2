@@ -183,6 +183,40 @@ class UI {
     this.showModal('rolesModal');
   }
 
+  showGiveCancelCardModal() {
+    const modal = getElement('giveCancelCardModal');
+    const container = getElement('giveCancelPlayersList');
+    
+    if (!modal || !container) return;
+
+    container.innerHTML = '';
+
+    const allPlayers = window.playersListData || [];
+
+    if (allPlayers.length === 0) {
+      container.innerHTML = '<p style="opacity:0.7;text-align:center;padding:20px;">Нет игроков</p>';
+      return;
+    }
+
+    allPlayers.forEach(player => {
+      const playerEl = document.createElement('div');
+      playerEl.className = 'target-item';
+      playerEl.innerHTML = `
+        <span>${player.nickname} (LVL ${player.level}, HP ${player.hp})</span>
+        <span style="font-size: 0.75rem; opacity: 0.7;">Карт: ${player.actionCards || 0}/10</span>
+      `;
+
+      playerEl.addEventListener('click', () => {
+        socket.adminGiveCancelCard(player.socketId);
+        this.hideModal('giveCancelCardModal');
+      });
+
+      container.appendChild(playerEl);
+    });
+
+    this.showModal('giveCancelCardModal');
+  }
+
   showAdminPanel() {
     const panel = getElement('adminPanel');
     if (panel) {

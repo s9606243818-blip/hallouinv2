@@ -59,21 +59,64 @@ function setupSocketHandlers(io) {
       const result = cardManager.useActionCard(socket.id, cardId, targetSocketId);
       
       if (result.success) {
-        const taskResult = taskManager.createTask(result.card, socket.id, targetSocketId);
-        
-        if (taskResult.success) {
+        // 🚫 Специальная обработка для карты "Отмена задания"
+        if (result.isCancelTask) {
           const player = gameState.getPlayer(socket.id);
-          socket.emit('playerUpdate', playerManager.getPlayerData(player));
-          
-          if (targetSocketId) {
-            const target = gameState.getPlayer(targetSocketId);
-            io.to(targetSocketId).emit('playerUpdate', playerManager.getPlayerData(target));
-          }
-          
-          io.emit('notification', {
-            message: `${player.nickname} использовал карту: ${result.card.name}`,
-            type: 'card'
+          const task = result.taskToCancel;
+
+          // Найти всех участников задания
+          const participantIds = new Set();
+          participantIds.add(task.creatorSocketId);
+          if (task.targetSocketId) participantIds.add(task.targetSocketId);
+          if (task.targetSocketId1) participantIds.add(task.targetSocketId1);
+          if (task.targetSocketId2) participantIds.add(task.targetSocketId2);
+
+          // Удалить задание у всех участников
+          participantIds.forEach(participantId => {
+            const participant = gameState.getPlayer(participantId);
+            if (participant) {
+              participant.activeTasks = participant.activeTasks.filter(t => t.id !== task.id);
+            }
           });
+
+          // Наказать отправителя -20 HP
+          const creator = gameState.getPlayer(task.creatorSocketId);
+          if (creator) {
+            playerManager.changeHP(task.creatorSocketId, -20);
+          }
+
+          // Обновить всех участников
+          participantIds.forEach(participantId => {
+            const participant = gameState.getPlayer(participantId);
+            if (participant) {
+              io.to(participantId).emit('playerUpdate', playerManager.getPlayerData(participant));
+            }
+          });
+
+          socket.emit('playerUpdate', playerManager.getPlayerData(player));
+
+          io.emit('notification', {
+            message: `${player.nickname} отменил задание! ${creator ? creator.nickname : 'Отправитель'} -20 HP`,
+            type: 'cancel'
+          });
+        } else {
+          // Обычная карта
+          const taskResult = taskManager.createTask(result.card, socket.id, targetSocketId);
+          
+          if (taskResult.success) {
+            const player = gameState.getPlayer(socket.id);
+            socket.emit('playerUpdate', playerManager.getPlayerData(player));
+            
+            if (targetSocketId) {
+              const target = gameState.getPlayer(targetSocketId);
+              io.to(targetSocketId).emit('playerUpdate', playerManager.getPlayerData(target));
+            }
+            
+            io.emit('notification', {
+              message: `${player.nickname} использовал карту: ${result.card.name}`,
+              type: 'card'
+            });
+          }
         }
       } else {
         socket.emit('error', { message: result.error });
@@ -406,6 +449,23 @@ function setupSocketHandlers(io) {
           message: `Игра перезапущена!`,
           type: 'admin'
         });
+      }
+    });
+
+    socket.on('adminGiveCancelCard', (data) => {
+      const { targetSocketId } = data;
+      const result = cardManager.giveCancelCard(socket.id, targetSocketId);
+      
+      if (result.success) {
+        const target = gameState.getPlayer(targetSocketId);
+        io.to(targetSocketId).emit('playerUpdate', playerManager.getPlayerData(target));
+        
+        io.emit('notification', {
+          message: `Админ выдал карту "Отмена задания" игроку ${result.targetNickname}`,
+          type: 'admin'
+        });
+      } else {
+        socket.emit('error', { message: result.error });
       }
     });
 

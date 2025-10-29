@@ -92,6 +92,31 @@ class CardManager {
 
     const card = player.actionCards[cardIndex];
 
+    // 🚫 Специальная логика для карты "Отмена задания"
+    if (card.type === 'cancel_task') {
+      // Проверяем есть ли активные задания
+      if (!player.activeTasks || player.activeTasks.length === 0) {
+        return { success: false, error: 'Нет активных заданий' };
+      }
+
+      // Получаем последнее (самое новое) задание
+      const lastTask = player.activeTasks[player.activeTasks.length - 1];
+
+      // Игнорируем запросы к ролям (role_request)
+      if (lastTask.type === 'role_request') {
+        return { success: false, error: 'Нельзя отменить запросы к ролям' };
+      }
+
+      player.actionCards.splice(cardIndex, 1);
+
+      return {
+        success: true,
+        card,
+        isCancelTask: true,
+        taskToCancel: lastTask
+      };
+    }
+
     if (card.type === 'other' && !targetSocketId) {
       return { success: false, error: 'Нужно выбрать цель' };
     }
@@ -151,6 +176,38 @@ class CardManager {
     return {
       success: true,
       card: randomCard
+    };
+  }
+
+  giveCancelCard(adminSocketId, targetSocketId) {
+    if (!gameState.isAdmin(adminSocketId)) {
+      return { success: false, error: 'Только админ может выдавать карты' };
+    }
+
+    const target = gameState.getPlayer(targetSocketId);
+    if (!target) {
+      return { success: false, error: 'Игрок не найден' };
+    }
+
+    if (target.actionCards.length >= 10) {
+      return { success: false, error: 'У игрока максимум карт (10)' };
+    }
+
+    // Карта "Отмена задания"
+    const cancelCard = {
+      id: 102,
+      name: "🚫 ОТМЕНА ЗАДАНИЯ",
+      type: "cancel_task",
+      timer: 0,
+      exp: 0,
+      description: "Отменяет последнее активное задание. Отправитель -20 HP"
+    };
+
+    target.actionCards.push(cancelCard);
+
+    return {
+      success: true,
+      targetNickname: target.nickname
     };
   }
 }

@@ -280,6 +280,10 @@ class SocketClient {
   adminResetGame() {
     this.emit('adminResetGame');
   }
+
+  adminGiveCancelCard(targetSocketId) {
+    this.emit('adminGiveCancelCard', { targetSocketId });
+  }
 }
 
 export default new SocketClient();
