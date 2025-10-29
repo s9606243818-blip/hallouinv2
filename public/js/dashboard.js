@@ -180,20 +180,10 @@ function renderTasks() {
       timerClass = 'warning';
     }
     
-    // HTML для участников
-    let participantsHTML = `
-      <div class="task-player">
-        <img src="${creator.avatar || '/avatars/default.png'}" class="task-player-avatar" alt="${creator.nickname}">
-        <div>
-          <div class="task-player-label">🚀 Отправил</div>
-          <div class="task-player-name">${creator.nickname}</div>
-        </div>
-      </div>
-    `;
+    // HTML для участников - ТОЛЬКО исполнители
+    let participantsHTML = '';
     
     if (targets.length > 0) {
-      participantsHTML += '<div class="task-arrow">⬇️</div>';
-      
       targets.forEach(target => {
         participantsHTML += `
           <div class="task-player">

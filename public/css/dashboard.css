@@ -292,13 +292,6 @@ body {
     margin-right: auto;
 }
 
-.task-arrow {
-    text-align: center;
-    font-size: 1.2rem;
-    opacity: 0.6;
-    margin: 4px 0;
-}
-
 .task-timer {
     display: flex;
     align-items: center;
