@@ -49,7 +49,8 @@ function collectTasks(players) {
   players.forEach(player => {
     if (player.activeTasks && Array.isArray(player.activeTasks)) {
       player.activeTasks.forEach(task => {
-        if (!allTasks.has(task.id)) {
+        // ✅ Фильтруем: только задания, а не запросы
+        if (task.type !== 'role_request' && !allTasks.has(task.id)) {
           allTasks.set(task.id, task);
         }
       });

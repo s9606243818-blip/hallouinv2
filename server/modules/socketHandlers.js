@@ -347,6 +347,7 @@ function setupSocketHandlers(io) {
           type: 'role'
         });
         
+        // 📊 Dashboard update
         io.emit('playersUpdate', playerManager.getPlayersList());
       } else {
         socket.emit('error', { message: result.error });

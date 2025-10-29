@@ -141,19 +141,27 @@ class TaskManager {
     }
 
     const hpLosers = [];
+    const allParticipants = new Set(); // Все участники задания
+    
+    // Добавляем создателя
+    allParticipants.add(task.creatorSocketId);
     
     // Определяем кто теряет HP
     if (task.targetSocketId1 && task.targetSocketId2) {
       // Задание "на двоих" - оба теряют HP
       hpLosers.push(task.targetSocketId1);
       hpLosers.push(task.targetSocketId2);
+      allParticipants.add(task.targetSocketId1);
+      allParticipants.add(task.targetSocketId2);
     } else if (task.type === 'other' && task.targetSocketId) {
       // Задание "на другого" - только цель теряет HP
       hpLosers.push(task.targetSocketId);
+      allParticipants.add(task.targetSocketId);
     } else if (task.type === 'both' && task.targetSocketId) {
       // Старая логика "на двоих" - оба теряют HP
       hpLosers.push(task.creatorSocketId);
       hpLosers.push(task.targetSocketId);
+      allParticipants.add(task.targetSocketId);
     }
 
     const updatedPlayers = [];
@@ -168,14 +176,14 @@ class TaskManager {
     this.removeTask(taskId);
 
     if (this.io) {
-      updatedPlayers.forEach(playerData => {
-        this.io.to(playerData.socketId).emit('playerUpdate', playerData);
+      // 🔴 Отправляем playerUpdate ВСЕМ участникам
+      allParticipants.forEach(participantId => {
+        const participant = gameState.getPlayer(participantId);
+        if (participant) {
+          this.io.to(participantId).emit('playerUpdate', playerManager.getPlayerData(participant));
+          console.log(`  ✓ Обновлен ${participant.nickname}`);
+        }
       });
-      
-      const creator = gameState.getPlayer(task.creatorSocketId);
-      if (creator) {
-        this.io.to(task.creatorSocketId).emit('playerUpdate', playerManager.getPlayerData(creator));
-      }
       
       this.io.emit('playersUpdate', playerManager.getPlayersList());
       this.io.emit('notification', {
