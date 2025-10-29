@@ -10,6 +10,7 @@ const MAX_EVENTS = 20;
 // Подключение
 socket.on('connect', () => {
   console.log('📊 Dashboard подключен');
+  socket.emit('getDashboardState');
 });
 
 // Количество игроков
@@ -17,14 +18,36 @@ socket.on('playersCount', (count) => {
   document.getElementById('onlineCount').textContent = count;
 });
 
+// Получение состояния для dashboard
+socket.on('dashboardState', (state) => {
+  console.log('📊 Получено состояние:', state);
+  if (state.players) {
+    renderPlayers(state.players);
+    collectTasks(state.players);
+  }
+  if (state.onlineCount !== undefined) {
+    document.getElementById('onlineCount').textContent = state.onlineCount;
+  }
+});
+
 // Обновление списка игроков
 socket.on('playersUpdate', (players) => {
+  console.log('🔄 playersUpdate:', players);
   renderPlayers(players);
-  
-  // Обновляем задания (собираем из всех игроков)
+  collectTasks(players);
+});
+
+// События
+socket.on('notification', (data) => {
+  addEvent(data);
+});
+
+// Собираем все активные задания
+function collectTasks(players) {
   const allTasks = new Map();
+  
   players.forEach(player => {
-    if (player.activeTasks) {
+    if (player.activeTasks && Array.isArray(player.activeTasks)) {
       player.activeTasks.forEach(task => {
         if (!allTasks.has(task.id)) {
           allTasks.set(task.id, task);
@@ -34,35 +57,9 @@ socket.on('playersUpdate', (players) => {
   });
   
   activeTasks = Array.from(allTasks.values());
+  console.log('📋 Активных заданий:', activeTasks.length, activeTasks);
   renderTasks();
-});
-
-// Состояние игры (при загрузке)
-socket.on('gameState', (state) => {
-  if (state.players) {
-    renderPlayers(state.players);
-    
-    // Собираем задания
-    const allTasks = new Map();
-    state.players.forEach(player => {
-      if (player.activeTasks) {
-        player.activeTasks.forEach(task => {
-          if (!allTasks.has(task.id)) {
-            allTasks.set(task.id, task);
-          }
-        });
-      }
-    });
-    
-    activeTasks = Array.from(allTasks.values());
-    renderTasks();
-  }
-});
-
-// События
-socket.on('notification', (data) => {
-  addEvent(data);
-});
+}
 
 // Рендер игроков
 function renderPlayers(players) {
@@ -114,10 +111,6 @@ function renderPlayers(players) {
             <div class="stat-label">⭐ Level</div>
             <div class="stat-value">${player.level}</div>
           </div>
-          <div class="stat">
-            <div class="stat-label">✨ EXP</div>
-            <div class="stat-value">${player.exp}</div>
-          </div>
         </div>
       </div>
     `;
@@ -128,12 +121,16 @@ function renderPlayers(players) {
 function renderTasks() {
   const container = document.getElementById('tasksList');
   
+  console.log('🎯 Рендер заданий, всего:', activeTasks.length);
+  
   if (!activeTasks || activeTasks.length === 0) {
     container.innerHTML = '<div class="empty-state">Нет активных заданий</div>';
     return;
   }
   
   container.innerHTML = activeTasks.map(task => {
+    console.log('📋 Task:', task);
+    
     // Определяем участников
     let participants = '';
     if (task.targetSocketId1 && task.targetSocketId2) {
@@ -221,6 +218,3 @@ setInterval(() => {
     renderTasks();
   }
 }, 1000);
-
-// Запрос начального состояния
-socket.emit('getDashboardState');

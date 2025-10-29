@@ -488,6 +488,16 @@ function setupSocketHandlers(io) {
       }
       console.log(`Отключение: ${socket.id}`);
     });
+
+    // 📊 Dashboard - получить состояние игры
+    socket.on('getDashboardState', () => {
+      const players = playerManager.getPlayersList();
+      
+      socket.emit('dashboardState', {
+        players,
+        onlineCount: players.length
+      });
+    });
   });
 }
 

@@ -13,7 +13,7 @@
 
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(135deg, #1e1b4b 0%, #312e81 50%, #1e293b 100%);
             color: #fff;
             min-height: 100vh;
             padding: 20px;
@@ -25,36 +25,16 @@
             display: grid;
             grid-template-columns: 1fr 1fr 1fr;
             gap: 20px;
-            grid-template-rows: auto 1fr;
-        }
-
-        .header {
-            grid-column: 1 / -1;
-            background: rgba(255, 255, 255, 0.1);
-            backdrop-filter: blur(10px);
-            border-radius: 20px;
-            padding: 30px;
-            text-align: center;
-        }
-
-        .header h1 {
-            font-size: 3rem;
-            margin-bottom: 10px;
-            text-shadow: 0 2px 10px rgba(0,0,0,0.3);
-        }
-
-        .header .online-count {
-            font-size: 1.5rem;
-            opacity: 0.9;
+            height: calc(100vh - 40px);
         }
 
         .panel {
-            background: rgba(255, 255, 255, 0.1);
+            background: rgba(15, 23, 42, 0.6);
             backdrop-filter: blur(10px);
+            border: 1px solid rgba(99, 102, 241, 0.2);
             border-radius: 20px;
             padding: 25px;
             overflow-y: auto;
-            max-height: calc(100vh - 250px);
         }
 
         .panel h2 {
@@ -62,11 +42,21 @@
             margin-bottom: 20px;
             padding-bottom: 15px;
             border-bottom: 2px solid rgba(255,255,255,0.3);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .panel-subtitle {
+            font-size: 1rem;
+            opacity: 0.8;
+            font-weight: normal;
         }
 
         /* Игроки */
         .player-card {
-            background: rgba(255, 255, 255, 0.15);
+            background: rgba(30, 41, 59, 0.5);
+            border: 1px solid rgba(99, 102, 241, 0.3);
             border-radius: 15px;
             padding: 20px;
             margin-bottom: 15px;
@@ -118,7 +108,7 @@
 
         .player-stats {
             display: grid;
-            grid-template-columns: repeat(3, 1fr);
+            grid-template-columns: repeat(2, 1fr);
             gap: 10px;
             font-size: 0.95rem;
         }
@@ -143,7 +133,8 @@
 
         /* Задания */
         .task-card {
-            background: rgba(255, 255, 255, 0.15);
+            background: rgba(30, 41, 59, 0.5);
+            border: 1px solid rgba(99, 102, 241, 0.3);
             border-radius: 15px;
             padding: 20px;
             margin-bottom: 15px;
@@ -189,7 +180,7 @@
 
         /* События */
         .event {
-            background: rgba(255, 255, 255, 0.1);
+            background: rgba(30, 41, 59, 0.4);
             border-left: 4px solid rgba(255,255,255,0.5);
             padding: 15px;
             margin-bottom: 10px;
@@ -229,13 +220,11 @@
 </head>
 <body>
     <div class="dashboard">
-        <div class="header">
-            <h1>🎮 GAME DASHBOARD</h1>
-            <div class="online-count">👥 Игроков онлайн: <span id="onlineCount">0</span></div>
-        </div>
-
         <div class="panel">
-            <h2>👥 Игроки</h2>
+            <h2>
+                <span>👥 Игроки</span>
+                <span class="panel-subtitle">✅ Онлайн: <span id="onlineCount">0</span></span>
+            </h2>
             <div id="playersList"></div>
         </div>
 
