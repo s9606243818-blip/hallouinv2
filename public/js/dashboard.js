@@ -128,7 +128,7 @@ function renderTasks() {
     return;
   }
   
-  container.innerHTML = activeTasks.map(task => {
+  const tasksHTML = activeTasks.map(task => {
     console.log('📋 Task:', task);
     
     // Определяем участников
@@ -160,16 +160,18 @@ function renderTasks() {
       <div class="task-card">
         <div class="task-header">🎯 ${task.cardName}</div>
         <div class="task-players">
-          От: ${task.creatorNickname}<br>
-          Для: ${participants}
+          👤 ${task.creatorNickname} → ${participants}
         </div>
-        ${task.description ? `<div style="opacity: 0.8; margin-bottom: 10px;">${task.description}</div>` : ''}
+        ${task.description ? `<div style="opacity: 0.7; margin-bottom: 8px; font-size: 0.8rem;">${task.description}</div>` : ''}
         <div class="task-timer ${timerClass}">
           ⏱️ ${timeStr}
         </div>
       </div>
     `;
   }).join('');
+  
+  // Оборачиваем в grid
+  container.innerHTML = `<div class="tasks-grid">${tasksHTML}</div>`;
 }
 
 // Добавить событие
